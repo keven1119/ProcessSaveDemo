@@ -1,0 +1,18 @@
+<resources>
+
+
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+
+        <item name="colorAccent">#3498db</item>
+        <item name="android:textColorHint">#88dd88</item> //提示字颜色(没焦点)
+        <item name="colorControlNormal">#88dd88</item> //下划线(没焦点)
+        <item name="colorControlActivated">#888888</item>//下划线(有焦点)
+        <item name="colorControlHighlight">#000000</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+
+</resources>

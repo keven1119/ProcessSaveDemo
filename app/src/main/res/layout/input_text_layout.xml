@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/text_input_pwd"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:errorTextAppearance="@color/colorBlack"
+    android:hint="密码">
+    <EditText
+        android:id="@+id/edt_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</android.support.design.widget.TextInputLayout>

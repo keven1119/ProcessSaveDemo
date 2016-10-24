@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.keven.joyrun.myplugin">
+
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- iBeancon功能所需权限 -->;
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <uses-feature android:name="android.hardware.usb.host" />
+    <uses-permission android:name="android.permission.USB_PERMISSION" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:largeHeap="true">
+        <activity android:name=".BubbleActvity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".RecyclerActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
+        <activity android:name=".Wakeupctivity"
+            android:launchMode="singleTask"/>
+
+        <service android:name=".services.AService"
+            android:process="com.keven.runa"/>
+        <service android:name=".services.BService"
+            android:process="com.keven.runb"/>
+
+        <receiver android:name=".receivers.MyReceiver"
+            android:process="com.keven.runc"/>
+
+        <receiver android:name=".receivers.LockReceiver"
+            android:process="com.keven.rund">
+            <intent-filter>
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.SCREEN_OFF" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receivers.ChargeReceiver" >
+            <intent-filter android:priority="1000" >
+                <action android:name="android.hardware.usb.action.USB_STATE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+        android:name=".receivers.GetuiReceiver"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}" />
+        </intent-filter>
+        </receiver>
+
+        <service android:name=".services.DaemonService"
+            android:process=":pushservice"/>
+        <service android:name=".services.WorkingService"/>
+    </application>
+
+</manifest>

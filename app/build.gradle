@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "24.0.0"
+    defaultConfig {
+        applicationId "com.keven.joyrun.myplugin"
+        minSdkVersion 19
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "mips", "mips64", "x86", "x86_64"
+        }
+
+        manifestPlaceholders = [
+                GETUI_APP_ID : "stiWjuGybX5B7HmPkANd4A",
+                GETUI_APP_KEY : "NN517AfYoi9XsPjFzPErB3",
+                GETUI_APP_SECRET : "8PFN0pMO8N9Z0QVtfiYmN6",
+                PACKAGE_NAME : applicationId
+        ]
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.google.firebase:firebase-core:9.6.1'
+    compile 'com.google.firebase:firebase-auth:9.6.1'
+    compile 'com.android.support:appcompat-v7:23.+'
+    testCompile 'junit:junit:4.12'
+
+    compile 'com.android.support:design:23.1.1'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.8'
+
+    compile 'com.getui:sdk:2.9.0.0'
+    compile 'com.android.support:support-v4:+'
+
+
+}
+
+apply plugin: 'com.google.gms.google-services'

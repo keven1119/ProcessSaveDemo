@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "553786722494",
+    "firebase_url": "https://firechat-25375.firebaseio.com",
+    "project_id": "firechat-25375",
+    "storage_bucket": "firechat-25375.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553786722494:android:ca5c14bede394563",
+        "android_client_info": {
+          "package_name": "com.keven.joyrun.myplugin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553786722494-eu36v46q76hq7tl55mrn44nqmcnm3990.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFNxKBcmdE1Yoh00Jr2q8vbKKTQBCHtMk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
