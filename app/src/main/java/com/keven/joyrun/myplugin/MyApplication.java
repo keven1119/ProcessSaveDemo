@@ -3,8 +3,12 @@ package com.keven.joyrun.myplugin;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.util.Log;
+
+import com.keven.joyrun.myplugin.services.DaemonService;
+import com.keven.joyrun.myplugin.services.WorkingService;
 
 /**
  * Created by keven on 16/10/13.
@@ -16,6 +20,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Log.d("keven1119", "onCreate process name ==>" + getProcessName(this));
+        startService(new Intent(this, WorkingService.class));
+        startService(new Intent(this, DaemonService.class));
     }
 
     @Override

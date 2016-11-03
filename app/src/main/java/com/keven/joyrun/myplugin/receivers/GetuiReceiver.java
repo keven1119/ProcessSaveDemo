@@ -20,7 +20,9 @@ public class GetuiReceiver extends BroadcastReceiver {
 
         if(!AppUtils.isWorking(context,"com.keven.joyrun.myplugin.services.DaemonService")){
 //            AppUtils.wakeupProgress(context);
-            context.startService(new Intent(context, DaemonService.class));
+            context.startService(new Intent(context, WorkingService.class));
+
+            context.startService(new Intent(context,DaemonService.class));
         }
     }
 }

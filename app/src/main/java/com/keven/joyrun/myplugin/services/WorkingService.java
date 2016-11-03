@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.WindowManager;
@@ -22,6 +23,13 @@ import com.keven.joyrun.myplugin.MainActivity;
 import com.keven.joyrun.myplugin.RecyclerActivity;
 import com.keven.joyrun.myplugin.Wakeupctivity;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.sql.BatchUpdateException;
 import java.util.Random;
 
@@ -40,6 +48,8 @@ public class WorkingService extends Service {
     CountTimer mCountTimer;
     private long mOneTimer = 0;
     private int mOn5sTimer = 0;
+    private Socket mClientSocket;
+    private PrintWriter mPrintWriter;
 
     private Random mRandom;
 
@@ -57,9 +67,13 @@ public class WorkingService extends Service {
                     break;
 
                 case CHECK_START:
-                    if(!AppUtils.isWorking(WorkingService.this,"com.keven.joyrun.myplugin.services.DaemonService")){
-                        AppUtils.wakeupProgress(WorkingService.this);
-                        Log.d("keven1119","WorkingService  to  startDaemonService");
+//                    if(!AppUtils.isWorking(WorkingService.this,"com.keven.joyrun.myplugin.services.DaemonService")){
+//                        AppUtils.wakeupProgress(WorkingService.this);
+//                        Log.d("keven1119","WorkingService  to  startDaemonService");
+//                    }
+
+                    if(mPrintWriter != null){
+                        mPrintWriter.println(" DaemonService  你好");
                     }
                     break;
 
@@ -79,7 +93,7 @@ public class WorkingService extends Service {
 
                 case OPEN_WAKEUP:
                     Intent intent3 = new Intent(WorkingService.this, Wakeupctivity.class);
-                    intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                     startActivity(intent3);
                     break;
             }
@@ -88,6 +102,7 @@ public class WorkingService extends Service {
     private PowerManager.WakeLock mWakelock;
     private KeyguardManager km;
     private KeyguardManager.KeyguardLock mKeyguardLock;
+    private boolean isFinishing;
 
     @Nullable
     @Override
@@ -101,16 +116,24 @@ public class WorkingService extends Service {
         super.onCreate();
         intent = new Intent();
         intent.setClassName("com.keven.joyrun.myplugin", "com.keven.joyrun.myplugin.BubbleActvity");
-
+        isFinishing = false;
         //开启锁屏监测
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(mScreenReceiver, filter);
+
+        new Thread() {
+            @Override
+            public void run() {
+                connectSocketServer();
+            }
+        }.start();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isFinishing = true;
         if(null != mScreenReceiver){
             unregisterReceiver(mScreenReceiver);
             mScreenReceiver = null;
@@ -135,6 +158,7 @@ public class WorkingService extends Service {
     private void action1s(long aLong) {
 
         if(screenLockTime != 0){
+            mHandler.sendEmptyMessageDelayed(OPEN_WAKEUP,200);
             mHandler.sendEmptyMessageDelayed(CHECK_START,200);
         }
 
@@ -166,10 +190,10 @@ public class WorkingService extends Service {
         if (mOn5sTimer % 4 == 2) {
             Log.d("keven1119","WorkingService  do on 5 second");
             mHandler.sendEmptyMessage(CHECK_START);
-            if (!AppUtils.isWorking(this,"com.keven.joyrun.myplugin.services.DaemonService")){
-                startService(new Intent(this,DaemonService.class));
-                Log.d("keven1119","wakeup DaemonService");
-            }
+//            if (!AppUtils.isWorking(this,"com.keven.joyrun.myplugin.services.DaemonService")){
+//                startService(new Intent(this,DaemonService.class));
+//                Log.d("keven1119","wakeup DaemonService");
+//            }
         }
 //        // 每10分钟唤醒屏幕一次
 //        if (mOn5sTimer % 120 == 4) {
@@ -218,7 +242,6 @@ public class WorkingService extends Service {
 
         try {
             mWakelock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP
-                    | PowerManager.SCREEN_DIM_WAKE_LOCK
                     | PowerManager.PARTIAL_WAKE_LOCK
                     | PowerManager.ON_AFTER_RELEASE
                     , "SimpleTimer");
@@ -252,4 +275,35 @@ public class WorkingService extends Service {
             mWakelock.release();
         }
     }
+
+
+    private void connectSocketServer() {
+        Socket socket = null;
+        while (socket == null) {
+            try {
+                //选择和服务器相同的端口8688
+                socket = new Socket("localhost", 8688);
+                mClientSocket = socket;
+                mPrintWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+            } catch (IOException e) {
+                SystemClock.sleep(1000);
+            }
+        }
+        try {
+            // 接收服务器端的消息
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            while (!isFinishing) {
+                final String msg = br.readLine();
+                if (msg != null) {
+                    Log.d("keven1119","working service msg==>" + msg);
+                }
+            }
+            mPrintWriter.close();
+            br.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

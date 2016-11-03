@@ -127,7 +127,7 @@ public class BubbleActvity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.button_status) {
-            button.setBackgroundColor(Color.RED);
+            button.setBackgroundColor(Color.argb(255, 255,400, 0));
         }
     }
 
