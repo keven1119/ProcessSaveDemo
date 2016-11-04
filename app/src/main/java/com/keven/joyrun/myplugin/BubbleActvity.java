@@ -136,10 +136,10 @@ public class BubbleActvity extends AppCompatActivity implements View.OnClickList
      */
     public void onLocationChanged(Location location) {
         updateView(location);
-        Log.i(TAG, "时间：" + location.getTime());
-        Log.i(TAG, "经度：" + location.getLongitude());
-        Log.i(TAG, "纬度：" + location.getLatitude());
-        Log.i(TAG, "海拔：" + location.getAltitude());
+        Log.i("keven1119", "时间：" + location.getTime());
+        Log.i("keven1119", "经度：" + location.getLongitude());
+        Log.i("keven1119", "纬度：" + location.getLatitude());
+        Log.i("keven1119", "海拔：" + location.getAltitude());
     }
 
     private void updateView(Location location) {
@@ -152,15 +152,15 @@ public class BubbleActvity extends AppCompatActivity implements View.OnClickList
         switch (status) {
             //GPS状态为可见时
             case LocationProvider.AVAILABLE:
-                Log.i(TAG, "当前GPS状态为可见状态");
+                Log.i("keven1119", "当前GPS状态为可见状态");
                 break;
             //GPS状态为服务区外时
             case LocationProvider.OUT_OF_SERVICE:
-                Log.i(TAG, "当前GPS状态为服务区外状态");
+                Log.i("keven1119", "当前GPS状态为服务区外状态");
                 break;
             //GPS状态为暂停服务时
             case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                Log.i(TAG, "当前GPS状态为暂停服务状态");
+                Log.i("keven1119", "当前GPS状态为暂停服务状态");
                 break;
         }
     }
@@ -195,11 +195,11 @@ public class BubbleActvity extends AppCompatActivity implements View.OnClickList
         switch (event) {
             //第一次定位
             case GpsStatus.GPS_EVENT_FIRST_FIX:
-                Log.i(TAG, "第一次定位");
+                Log.i("keven1119", "第一次定位");
                 break;
             //卫星状态改变
             case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                Log.i(TAG, "卫星状态改变");
+                Log.i("keven1119", "卫星状态改变");
                 //获取当前状态
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
@@ -225,11 +225,11 @@ public class BubbleActvity extends AppCompatActivity implements View.OnClickList
                 break;
             //定位启动
             case GpsStatus.GPS_EVENT_STARTED:
-                Log.i(TAG, "定位启动");
+                Log.i("keven1119", "定位启动");
                 break;
             //定位结束
             case GpsStatus.GPS_EVENT_STOPPED:
-                Log.i(TAG, "定位结束");
+                Log.i("keven1119", "定位结束");
                 break;
         }
     }

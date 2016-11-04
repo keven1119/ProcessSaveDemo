@@ -44,6 +44,7 @@ public class WorkingService extends Service {
     private static final int CHECK_START = 2;
     private static final int SCREEN_ON = 3;
     private static final int OPEN_WAKEUP = 4;
+    private static final int KILL_PROCESS = 5;
 
     CountTimer mCountTimer;
     private long mOneTimer = 0;
@@ -96,6 +97,9 @@ public class WorkingService extends Service {
                     intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                     startActivity(intent3);
                     break;
+
+                case KILL_PROCESS:
+                    android.os.Process.killProcess(android.os.Process.myPid());
             }
         }
     } ;
@@ -149,7 +153,7 @@ public class WorkingService extends Service {
                     mOneTimer++;
                     action1s(mOneTimer);
                 }
-            },1000);
+            },500);
             mCountTimer.startTimer();
         }
         return super.onStartCommand(intent, flags, startId);
@@ -195,6 +199,11 @@ public class WorkingService extends Service {
 //                Log.d("keven1119","wakeup DaemonService");
 //            }
         }
+
+//        if(screenLockTime != 0 && (System.currentTimeMillis() - screenLockTime)/1000/60 > 2){
+//            Log.d("keven1119","kill main process");
+//            mHandler.sendEmptyMessage(KILL_PROCESS);
+//        }
 //        // 每10分钟唤醒屏幕一次
 //        if (mOn5sTimer % 120 == 4) {
 //            Log.e("keven1119","唤醒屏幕");

@@ -1,5 +1,8 @@
 package com.keven.joyrun.myplugin;
 
+import android.app.AlarmManager;
+import android.content.Context;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,6 +19,8 @@ public class CountTimer {
     private int mTimerInterval = 1000; // 定时器触发间隔时间(ms)
 //	private boolean isStartTimer;            // 定时器是否已开启
 
+    private AlarmManager alarmManager;
+
     /**
      * @param runnable CountTimer会定时回调
      */
@@ -28,9 +33,16 @@ public class CountTimer {
             mTimerTask = null;
         }
 
+//        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
     }
 
     public void startTimer() {
+
+//        if(null != alarmManager){
+//            alarmManager.set
+//        }
+
         if (mRunnable == null || mTimerTask != null) {
             return;
         }
