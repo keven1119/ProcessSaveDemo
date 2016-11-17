@@ -16,9 +16,16 @@ import com.keven.joyrun.myplugin.services.WorkingService;
 
 public class MyApplication extends Application {
 
+    public static MyApplication  mGlodenApp;
+
+    public static MyApplication getInstance(){
+        return mGlodenApp;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        mGlodenApp = this;
         Log.d("keven1119", "onCreate process name ==>" + getProcessName(this));
         startService(new Intent(this, WorkingService.class));
         startService(new Intent(this, DaemonService.class));

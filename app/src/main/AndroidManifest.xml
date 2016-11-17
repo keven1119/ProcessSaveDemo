@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:largeHeap="true">
-        <activity android:name=".BubbleActvity"
+        <activity android:name=".RecyclerActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecyclerActivity"
+        <activity android:name=".BubbleActvity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
         <activity android:name=".Wakeupctivity"
@@ -41,8 +41,24 @@
         <service android:name=".services.AService"
             android:process="com.keven.runa"/>
         <service android:name=".services.BService"
-            android:process="com.keven.runb"/>
+            android:process="com.keven.runb"/>'
 
+
+        <service android:name=".services.BackgroundAudioService">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+
+
+        <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+            </intent-filter>
+        </receiver>
         <receiver android:name=".receivers.MyReceiver"
             android:process="com.keven.runc"/>
 
@@ -71,6 +87,7 @@
         <service android:name=".services.DaemonService"
             android:process=":pushservice"/>
         <service android:name=".services.WorkingService"/>
+
     </application>
 
 </manifest>

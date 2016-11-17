@@ -2,6 +2,7 @@ package com.keven.joyrun.myplugin;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import java.lang.reflect.Field;
