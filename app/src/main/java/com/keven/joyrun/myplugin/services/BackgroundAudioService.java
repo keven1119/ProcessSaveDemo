@@ -120,6 +120,20 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
             super.onSeekTo(pos);
         }
 
+        @Override
+        public void onStop() {
+            super.onStop();
+        }
+
+        @Override
+        public void onSkipToNext() {
+            super.onSkipToNext();
+        }
+
+        @Override
+        public void onSkipToPrevious() {
+            super.onSkipToPrevious();
+        }
     };
 
     @Override
@@ -152,6 +166,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
         mMediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setVolume(1.0f, 1.0f);
+        mMediaPlayer.setLooping(true);
     }
 
     private void showPlayingNotification() {
@@ -161,9 +176,9 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
         }
 
 
-        builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_pause, "Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        builder.addAction(new NotificationCompat.Action(R.drawable.ico_joyrun_marathon, "Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
         builder.setStyle(new NotificationCompat.MediaStyle().setShowActionsInCompactView(0).setMediaSession(mMediaSessionCompat.getSessionToken()));
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setSmallIcon(R.mipmap.ico_joyrun_marathon);
         NotificationManagerCompat.from(BackgroundAudioService.this).notify(1, builder.build());
     }
 
@@ -185,7 +200,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
         mMediaSessionCompat = new MediaSessionCompat(getApplicationContext(), "Tag", mediaButtonReceiver, null);
 
         mMediaSessionCompat.setCallback(mMediaSessionCallback);
-        mMediaSessionCompat.setFlags( MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS );
+        mMediaSessionCompat.setFlags( MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS );
 
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         mediaButtonIntent.setClass(this, MediaButtonReceiver.class);
@@ -209,17 +224,23 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
     private void initMediaSessionMetadata() {
         MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
         //Notification icon in card
-        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
-        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, BitmapFactory.decodeResource(getResources(), R.mipmap. ico_joyrun_marathon));
+        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, BitmapFactory.decodeResource(getResources(), R.mipmap.ico_joyrun_marathon));
 
         //lock screen icon for pre lollipop
-        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
-        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, "Display Title");
-        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, "Display Subtitle");
+        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, BitmapFactory.decodeResource(getResources(), R.mipmap.ico_joyrun_marathon));
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, "我的天空");
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, "我的天空");
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, "我的天空");
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, "我的天空");
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, "我的天空");
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, "詹姆斯布朗");
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "勒哈啦");
         metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, 1);
         metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, 1);
 
         mMediaSessionCompat.setMetadata(metadataBuilder.build());
+
     }
 
     private boolean successfullyRetrievedAudioFocus() {
@@ -237,7 +258,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
     @Override
     public BrowserRoot onGetRoot(@NonNull String clientPackageName, int clientUid, @Nullable Bundle rootHints) {
         if(TextUtils.equals(clientPackageName, getPackageName())) {
-            return new BrowserRoot(getString(R.string.app_name), null);
+            return new BrowserRoot("keven11199999999", null);
         }
 
         return null;

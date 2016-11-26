@@ -2,6 +2,7 @@ package com.keven.joyrun.myplugin;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -13,7 +14,6 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaControllerCompat;
-import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,15 +24,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.keven.joyrun.myplugin.provider.ScreenshotContentObserver;
+import com.keven.joyrun.myplugin.services.BackgroundAudioService;
 import com.keven.joyrun.myplugin.services.WorkingService;
 
 import java.util.ArrayList;
-
-import static android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED;
-import static android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING;
 
 /**
  * Created by keven on 16/10/17.
@@ -40,11 +39,16 @@ import static android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
 
 public class RecyclerActivity extends AppCompatActivity {
 
+    private static final int STATE_PAUSED = 0;
+    private static final int STATE_PLAYING = 1;
+
     RecyclerView mRecyclerView;
 
     private int mCurrentState;
     private MediaBrowserCompat mMediaBrowserCompat;
     private MediaControllerCompat mMediaControllerCompat;
+    private Button mPlayPauseToggleButton;
+
 
     private MediaControllerCompat.Callback mMediaControllerCompatCallback = new MediaControllerCompat.Callback() {
 
@@ -56,15 +60,20 @@ public class RecyclerActivity extends AppCompatActivity {
             }
 
             switch( state.getState() ) {
-                case STATE_PLAYING: {
+                case PlaybackStateCompat.STATE_PLAYING: {
                     mCurrentState = STATE_PLAYING;
                     break;
                 }
-                case STATE_PAUSED: {
+                case PlaybackStateCompat.STATE_PAUSED: {
                     mCurrentState = STATE_PAUSED;
                     break;
                 }
             }
+        }
+
+        @Override
+        public void onExtrasChanged(Bundle extras) {
+            super.onExtrasChanged(extras);
         }
     };
 
@@ -135,6 +144,33 @@ public class RecyclerActivity extends AppCompatActivity {
         TitleItemDecoration titleItemDecoration = new TitleItemDecoration(this, numberDatas);
         mRecyclerView.addItemDecoration(titleItemDecoration);
         mRecyclerView.setAdapter(viewHolderAdapter);
+
+
+        mPlayPauseToggleButton = (Button) findViewById(R.id.button);
+
+        mMediaBrowserCompat = new MediaBrowserCompat(this, new ComponentName(this, BackgroundAudioService.class),
+                mMediaBrowserCompatConnectionCallback, getIntent().getExtras());
+
+        mMediaBrowserCompat.connect();
+
+        mPlayPauseToggleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if( mCurrentState == STATE_PAUSED ) {
+                    getSupportMediaController().getTransportControls().play();
+                    mCurrentState = STATE_PLAYING;
+                } else {
+                    PlaybackStateCompat playbackState = getSupportMediaController().getPlaybackState();
+                    int state = playbackState.getState();
+                    if( state == PlaybackStateCompat.STATE_PLAYING ) {
+                        getSupportMediaController().getTransportControls().pause();
+                    }
+
+                    mCurrentState = STATE_PAUSED;
+                }
+            }
+        });
+
     }
 
     @Override
